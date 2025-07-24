@@ -1,0 +1,71 @@
+#include<stdio.h>
+#include<time.h>
+#include<stdlib.h>
+#include<string.h>
+
+#ifdef _WIN32
+#include<windows.h> // For Sleep() on Windows
+#else
+#include<unistd.h>  // For sleep() on Unix/Linux
+#endif
+
+int main()
+{
+    int random, guess, no_of_guess = 0, play_again = 1, difficulty, upper_limit;
+    char name[50];
+
+    srand(time(NULL));
+    printf("\n Welcome to the Number Guessing Game!");
+    printf("\nEnter your name: ");
+    fgets(name, sizeof(name), stdin);
+    name[strcspn(name, "\n")] = '\0';
+
+    while (play_again) {
+        // Difficulty Selection
+        printf("\n\nChoose a difficulty level:");
+        printf("\n1. Easy (1-50)");
+        printf("\n2. Medium (1-100)");
+        printf("\n3. Hard (1-200)");
+        printf("\n\nEnter choice (1-3): ");
+        scanf("%d", &difficulty);
+
+        switch(difficulty) {
+            case 1: upper_limit = 50; break;
+            case 2: upper_limit = 100; break;
+            case 3: upper_limit = 200; break;
+            default: 
+                printf("Invalid input, defaulting to Medium (1-100).\n");
+                upper_limit = 100;
+        }
+
+        random = rand() % upper_limit + 1;
+        no_of_guess = 0;
+
+        printf("\nOkay %s, I've picked a number between 1 and %d.\nCan you guess it?", name, upper_limit);
+
+        do {
+            printf("\n\n Enter your guess: ");
+            scanf("%d", &guess);
+            no_of_guess++;
+
+            if (guess < random) {
+                printf(" Too low! Try guessing a larger number.");
+            } else if (guess > random) {
+                printf(" Too high! Try a smaller one.");
+            } else {
+                printf("\n Bravo %s! You guessed the number in %d attempts.\n", name, no_of_guess);
+                if (no_of_guess <= 5) printf(" Excellent instincts!");
+                else if (no_of_guess <= 10) printf(" Nicely done!");
+                else printf(" That took a few tries, but you made it!");
+            }
+
+        } while (guess != random);
+
+        printf("\n\nDo you want to play again? (1 = Yes, 0 = No): ");
+        scanf("%d", &play_again);
+    }
+
+    printf("\n Thanks for playing, %s! See you next time.\n", name);
+    printf("Developed by CREATORLAKSHYA\n");
+    return 0;
+}
